@@ -52,23 +52,9 @@ if image:
         st.image(image, caption="Gambar yang Diunggah", use_column_width=True)
 
     if st.sidebar.button('Deteksi Objek'):
-        # Konversi gambar PIL ke format OpenCV
-        image_cv = np.array(image.convert('RGB'))
-        image_cv = image_cv[:, :, ::-1].copy()
-
-        # Prediksi
-        res = model.predict(image_cv, conf=confidence)
+        res = model.predict(image, conf=confidence)
         boxes = res[0].boxes
-
-        # Warna acak untuk setiap bounding box
-        for box in boxes:
-            x1, y1, x2, y2 = map(int, box.xyxy[0])  # Koordinat bounding box
-            color = tuple(np.random.randint(0, 255, 3).tolist())  # Warna acak
-            cv2.rectangle(image_cv, (x1, y1), (x2, y2), color, 2)  # Gambar bounding box
-            cv2.putText(image_cv, "Jeruk", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-
-        # Tampilkan gambar dengan bounding box berwarna
-        res_plotted = image_cv[:, :, ::-1]  # Konversi kembali ke format RGB untuk ditampilkan
+        res_plotted = res[0].plot()[:, :, ::-1]
         with col2:
             st.image(res_plotted, caption='Gambar Terdeteksi', use_column_width=True)
             with st.expander("Hasil Deteksi"):
