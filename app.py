@@ -78,4 +78,4 @@ if use_camera:
         camera_placeholder.image(frame, channels="RGB", use_column_width=True)
 
     cap.release()
-    # cv2.destroyAllWindows()
+    cv2.destroyAllWindows()
