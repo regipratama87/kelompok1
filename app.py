@@ -5,7 +5,7 @@ import cv2
 import requests
 from io import BytesIO
 
-model_path = 'models/best.pt'
+model_path = 'best.pt'
 
 st.set_page_config(
     page_title="Deteksi Jeruk",
