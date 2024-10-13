@@ -62,20 +62,4 @@ if image:
 
 # Via Camera
 if use_camera:
-    cap = cv2.VideoCapture(0)
-    st.write("Deteksi Kamera Real-time Diaktifkan")
-    camera_placeholder = st.empty()
-
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            st.error("Gagal menangkap frame video.")
-            break
-
-        results = model.predict(frame, conf=confidence)
-        frame = results[0].plot()[:, :, ::-1]
-
-        camera_placeholder.image(frame, channels="RGB", use_column_width=True)
-
-    cap.release()
-    cv2.destroyAllWindows()
+    st.warning("Akses kamera tidak didukung di Cloud Streamlit. Unggah gambar atau gunakan URL gambar untuk dideteksi.")
