@@ -48,9 +48,7 @@ elif image_url:
 
 # Via Camera
 if use_camera:
-    camera_image = st.camera_input("Ambil gambar menggunakan kamera")
-    if camera_image:
-        image = PIL.Image.open(camera_image)
+    st.warning("Akses kamera tidak didukung di Cloud Streamlit. Unggah gambar atau gunakan URL gambar untuk dideteksi.")
 
 # Proses
 if image:
@@ -66,10 +64,12 @@ if image:
         res = model.predict(image_cv, conf=confidence)
         boxes = res[0].boxes
 
+        # Warna tetap untuk bounding box (merah)
+        color = (255, 0, 0)  # Warna merah dalam format BGR
+
         # Gambar kotak di gambar deteksi
         for box in boxes:
             x1, y1, x2, y2 = map(int, box.xyxy[0])  # Koordinat bounding box
-            color = tuple(np.random.randint(0, 255, 3).tolist())  # Warna acak
             cv2.rectangle(image_cv, (x1, y1), (x2, y2), color, 2)  # Gambar bounding box
             cv2.putText(image_cv, "Jeruk", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
