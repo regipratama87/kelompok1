@@ -62,5 +62,11 @@ if image:
                     st.write(box.xywh)
 
 # Peringatan untuk Cloud Streamlit
+# if use_camera:
+#     st.warning("Akses kamera tidak didukung di Cloud Streamlit. Unggah gambar atau gunakan URL gambar untuk dideteksi.")
+
+# Via Camera
 if use_camera:
-    st.warning("Akses kamera tidak didukung di Cloud Streamlit. Unggah gambar atau gunakan URL gambar untuk dideteksi.")
+    camera_image = st.camera_input("Ambil gambar menggunakan kamera")
+    if camera_image:
+        image = PIL.Image.open(camera_image)
