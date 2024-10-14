@@ -46,37 +46,23 @@ elif image_url:
         st.error("Tidak dapat memuat gambar dari URL yang diberikan.")
         st.error(ex)
 
-# Via Camera
-if use_camera:
-    st.warning("Akses kamera tidak didukung di Cloud Streamlit. Unggah gambar atau gunakan URL gambar untuk dideteksi.")
-
 # Proses
 if image:
     with col1:
         st.image(image, caption="Gambar yang Diunggah", use_column_width=True)
 
     if st.sidebar.button('Deteksi Objek'):
-        # Konversi gambar ke format OpenCV untuk prediksi
-        image_cv = np.array(image.convert('RGB'))
-        image_cv = image_cv[:, :, ::-1].copy()  # Konversi dari RGB ke BGR
-
-        # Prediksi
-        res = model.predict(image_cv, conf=confidence)
+        res = model.predict(image, conf=confidence)
         boxes = res[0].boxes
-
-        # Warna tetap untuk bounding box (merah)
-        color = (255, 0, 0)  # Warna merah dalam format BGR
-
-        # Gambar kotak di gambar deteksi
-        for box in boxes:
-            x1, y1, x2, y2 = map(int, box.xyxy[0])  # Koordinat bounding box
-            cv2.rectangle(image_cv, (x1, y1), (x2, y2), color, 2)  # Gambar bounding box
-            cv2.putText(image_cv, "Jeruk", (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-
-        # Tampilkan hasil deteksi
-        res_plotted = image_cv[:, :, ::-1]  # Konversi kembali ke RGB untuk Streamlit
+        res_plotted = res[0].plot()[:, :, ::-1]
         with col2:
             st.image(res_plotted, caption='Gambar Terdeteksi', use_column_width=True)
             with st.expander("Hasil Deteksi"):
                 for box in boxes:
                     st.write(box.xywh)
+
+# Via Camera
+if use_camera:
+    camera_image = st.camera_input("Ambil gambar menggunakan kamera")
+    if camera_image:
+        image = PIL.Image.open(camera_image)
