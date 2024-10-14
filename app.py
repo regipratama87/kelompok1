@@ -66,3 +66,16 @@ if use_camera:
     camera_image = st.camera_input("Ambil gambar menggunakan kamera")
     if camera_image:
         image = PIL.Image.open(camera_image)
+        with col1:
+            st.image(image, caption="Gambar dari Kamera", use_column_width=True)
+        
+        if st.sidebar.button('Deteksi Objek Kamera'):
+            res = model.predict(image, conf=confidence)
+            boxes = res[0].boxes
+            res_plotted = res[0].plot()[:, :, ::-1]
+            with col2:
+                st.image(res_plotted, caption='Hasil Deteksi Kamera', use_column_width=True)
+                with st.expander("Hasil Deteksi Kamera"):
+                    for box in boxes:
+                        st.write(box.xywh)
+
